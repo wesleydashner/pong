@@ -17,14 +17,18 @@ struct PhysicsCategory {
     
 }
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var ball = SKSpriteNode()
     var playerPaddle = SKSpriteNode()
     var enemyPaddle = SKSpriteNode()
     var border = SKSpriteNode()
     
+    let impactGenerator = UIImpactFeedbackGenerator(style: .light)
+    
     override func didMove(to view: SKView) {
+        self.physicsWorld.contactDelegate = self
+        
         ball = SKSpriteNode(imageNamed: "ball")
         ball.setScale(0.3)
         ball.position = CGPoint(x: 0, y: 0)
@@ -68,7 +72,7 @@ class GameScene: SKScene {
         self.addChild(border)
         
         ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-        ball.physicsBody?.applyImpulse(CGVector(dx: 100, dy: 100))
+        ball.physicsBody?.applyImpulse(CGVector(dx: 75, dy: 75))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -94,6 +98,10 @@ class GameScene: SKScene {
             let move = SKAction.moveBy(x: -10, y: 0, duration: 0.0167)
             enemyPaddle.run(move)
         }
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        impactGenerator.impactOccurred()
     }
     
 }
