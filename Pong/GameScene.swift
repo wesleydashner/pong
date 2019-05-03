@@ -32,6 +32,9 @@ class GameScene: SKScene {
         ball.physicsBody?.contactTestBitMask = PhysicsCategory.paddles
         ball.physicsBody?.affectedByGravity = false
         ball.physicsBody?.isDynamic = true
+        ball.physicsBody?.restitution = 1
+        ball.physicsBody?.friction = 0
+        ball.physicsBody?.linearDamping = 0
         self.addChild(ball)
         
         playerPaddle = SKSpriteNode(imageNamed: "paddle")
@@ -55,6 +58,9 @@ class GameScene: SKScene {
         enemyPaddle.physicsBody?.affectedByGravity = false
         enemyPaddle.physicsBody?.isDynamic = false
         self.addChild(enemyPaddle)
+        
+        ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+        ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -67,7 +73,18 @@ class GameScene: SKScene {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
             let location = t.location(in: self)
-            playerPaddle.position = CGPoint(x: location.x, y: playerPaddle.position.y)
+            playerPaddle.position.x = location.x
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        if enemyPaddle.position.x < ball.position.x {
+            let move = SKAction.moveBy(x: 10, y: 0, duration: 0.0167)
+            enemyPaddle.run(move)
+        }
+        else if enemyPaddle.position.x > ball.position.x {
+            let move = SKAction.moveBy(x: -10, y: 0, duration: 0.0167)
+            enemyPaddle.run(move)
         }
     }
     
