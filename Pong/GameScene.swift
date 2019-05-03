@@ -13,6 +13,7 @@ struct PhysicsCategory {
     
     static let ball: UInt32 = 0x1 << 1
     static let paddles: UInt32 = 0x1 << 2
+    static let border: UInt32 = 0x1 << 3
     
 }
 
@@ -21,6 +22,7 @@ class GameScene: SKScene {
     var ball = SKSpriteNode()
     var playerPaddle = SKSpriteNode()
     var enemyPaddle = SKSpriteNode()
+    var border = SKSpriteNode()
     
     override func didMove(to view: SKView) {
         ball = SKSpriteNode(imageNamed: "ball")
@@ -28,8 +30,8 @@ class GameScene: SKScene {
         ball.position = CGPoint(x: 0, y: 0)
         ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.frame.width / 2)
         ball.physicsBody?.categoryBitMask = PhysicsCategory.ball
-        ball.physicsBody?.collisionBitMask = PhysicsCategory.paddles
-        ball.physicsBody?.contactTestBitMask = PhysicsCategory.paddles
+        ball.physicsBody?.collisionBitMask = PhysicsCategory.paddles | PhysicsCategory.border
+        ball.physicsBody?.contactTestBitMask = PhysicsCategory.paddles | PhysicsCategory.border
         ball.physicsBody?.affectedByGravity = false
         ball.physicsBody?.isDynamic = true
         ball.physicsBody?.restitution = 1
@@ -59,8 +61,14 @@ class GameScene: SKScene {
         enemyPaddle.physicsBody?.isDynamic = false
         self.addChild(enemyPaddle)
         
+        border.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        border.physicsBody?.categoryBitMask = PhysicsCategory.border
+        border.physicsBody?.collisionBitMask = PhysicsCategory.ball
+        border.physicsBody?.contactTestBitMask = PhysicsCategory.ball
+        self.addChild(border)
+        
         ball.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-        ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
+        ball.physicsBody?.applyImpulse(CGVector(dx: 100, dy: 100))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
