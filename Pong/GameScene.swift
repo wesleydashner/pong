@@ -36,7 +36,7 @@ class GameScene: SKScene {
         
         playerPaddle = SKSpriteNode(imageNamed: "paddle")
         playerPaddle.setScale(0.2)
-        playerPaddle.position = CGPoint(x: 0, y: -self.frame.height / 2 + 50)
+        playerPaddle.position = CGPoint(x: 0, y: -self.frame.height / 2 + 70)
         playerPaddle.physicsBody = SKPhysicsBody(rectangleOf: playerPaddle.size)
         playerPaddle.physicsBody?.categoryBitMask = PhysicsCategory.paddles
         playerPaddle.physicsBody?.collisionBitMask = PhysicsCategory.ball
@@ -47,7 +47,7 @@ class GameScene: SKScene {
         
         enemyPaddle = SKSpriteNode(imageNamed: "paddle")
         enemyPaddle.setScale(0.2)
-        enemyPaddle.position = CGPoint(x: 0, y: -self.frame.height / 2 + 50)
+        enemyPaddle.position = CGPoint(x: 0, y: self.frame.height / 2 - 70)
         enemyPaddle.physicsBody = SKPhysicsBody(rectangleOf: enemyPaddle.size)
         enemyPaddle.physicsBody?.categoryBitMask = PhysicsCategory.paddles
         enemyPaddle.physicsBody?.collisionBitMask = PhysicsCategory.ball
@@ -55,29 +55,20 @@ class GameScene: SKScene {
         enemyPaddle.physicsBody?.affectedByGravity = false
         enemyPaddle.physicsBody?.isDynamic = false
         self.addChild(enemyPaddle)
-        
-//        ground = SKSpriteNode(imageNamed: "ground")
-//        ground.setScale(0.7)
-//        ground.position = CGPoint(x: 0, y: -(self.frame.height / 2) + ground.frame.height / 2)
-//        ground.physicsBody = SKPhysicsBody(rectangleOf: ground.size)
-//        ground.physicsBody?.categoryBitMask = PhysicsCategory.ground
-//        ground.physicsBody?.collisionBitMask = PhysicsCategory.ball
-//        ground.physicsBody?.contactTestBitMask = PhysicsCategory.ball
-//        ground.physicsBody?.affectedByGravity = false
-//        ground.physicsBody?.isDynamic = false
-//        self.addChild(ground)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches {
-//
-//        }
+        for t in touches {
+            let location = t.location(in: self)
+            playerPaddle.position = CGPoint(x: location.x, y: playerPaddle.position.y)
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches {
-//
-//        }
+        for t in touches {
+            let location = t.location(in: self)
+            playerPaddle.position = CGPoint(x: location.x, y: playerPaddle.position.y)
+        }
     }
     
 }
